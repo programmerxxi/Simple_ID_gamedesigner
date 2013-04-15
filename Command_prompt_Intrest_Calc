@@ -1,0 +1,38 @@
+//In Order to continue in one project you need to remove main... check video for explmation
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+int main(){
+//int Intrest_Calc(){
+
+  float a;//mony made
+	float p = 0;
+	float r = 0.0;
+	int day = 0;
+
+	cout << "Principal: " << endl;
+	cin >> p;
+
+	cout << "Rate: " << endl;
+	cin >> r;
+
+	cout << "Term: " << endl;
+	cin >> day;
+	cout << "\n\n";
+	
+	for(int days = 1;days <= day; days++ ){
+		a = p * pow(1+r, days);
+		if(days < 10){
+			cout << "0" << days << " ----- " << a << endl;
+		}else{
+			cout << days << " ----- " << a << endl;
+		}
+	}
+
+	cout << "\n\n";
+	
+	system("PAUSE");
+	return 0;
+}
