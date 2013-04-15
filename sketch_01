@@ -1,0 +1,270 @@
+#include <iostream>
+#include <ostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+int Yes_Or_No();
+void Write_to_File(string name_of_File, string names[],string Class_ID[],int attackpower[],int range[],int speed[],double rate_of_fire[],int clip_size[],int number_of_mags[], int searalNo[], int number_of_units);
+void displayItems(int x);
+void read_file(string name);
+string name_File(int x, string sg);
+void Create_file();
+void Edit_File(string name_of_file);
+
+// Main Function
+int main(){
+//void pea_pod(){
+  // Just a review
+	int input = 0;
+	string file_name;
+
+	try{
+		do{
+			cout << "Witch qould you like to do: \n1 - view a file \n2 - Make a new file \n3 - Edit an already exsting File \n4 - Exit \n";
+			cin >> input;
+		
+			if(input == 1){
+				cout << "\n(please include the extention type)\nwhat is the name of the file: ";
+
+				cin >> file_name;
+
+				read_file(file_name);
+
+			}else if(input == 2){
+
+				Create_file();
+
+			}else if(input == 3){
+				cout << "\n(please include the extention type)\nwhat is the name of the file: ";
+
+				cin >> file_name;
+
+				Edit_File(file_name);
+
+			}else if(input > 4 || input < 1){
+				throw 99;
+			}
+		}while(input != 4);
+
+	}catch(int x){
+		cout << "ERROR: PLEASE TYPE A VALID ANSWER";
+	}catch(...){
+		cout << "ERROR: PLEASE Notify";
+	}
+
+	
+	system("PAUSE");
+}
+void Create_file(){
+	
+	int is_Yes_Or_No = 0, passer1 = 0;
+	//int Details[100][4];
+	string name_of_item[100], Class_ID[100];
+
+	string name_of_File;
+
+	string name;
+	int attackpower[100], range[100], speed[100], clipsize[100], mag_Num[100], searalNo[100], counter = 0;
+	double rate_of_fire[100];
+
+	cout << "\nMaking Gun/wepon statistics for a game/bluprint...\n\n";
+
+	for(int x = 0; is_Yes_Or_No != 2;x++){
+		cout << "Name: ";
+		cin >> name_of_item[x];
+		cout << "Type/Sniper/MG./ext: ";
+		cin >>  Class_ID[x];
+		cout << "Attack power/Damage: ";
+		cin >> attackpower[x];
+		cout << "Range: ";
+		cin >> range[x];
+		cout << "Speed: ";
+		cin >> speed[x];
+		cout << "rate of fire\n(in sec.): ";
+		cin >> rate_of_fire[x];
+		cout << "clip_size: ";
+		cin >> clipsize[x];
+		cout << "Number of Clips: ";
+		cin >> mag_Num[x];
+		cout << "Searal No#: ";
+		cin >> searalNo[x];
+
+		counter++;
+
+		cout << "\nwould you like to add a new item?" << endl;
+		
+		is_Yes_Or_No = Yes_Or_No();
+
+	}
+	
+	if(is_Yes_Or_No == 2){
+		cout << "\nwould you like to save your info to a file?" << endl;
+
+		is_Yes_Or_No = Yes_Or_No();
+
+		if(is_Yes_Or_No == 2){
+			cout << "then why type it?" << endl;
+		}else{
+			cout << "\nWhat type of file would you like it saved as: \n\n";
+			cout << "1 - .txt\n2 - .doc\n3 - .dot\n" << endl;
+			cin >> passer1;
+			if(passer1 < 1 || passer1 > 4){
+				cout << "Invalid please retry ";
+			}else{
+				cout << "\nwhat would you like to name it\n";
+				cin >> name_of_File;
+				name_of_File = name_File(passer1, name_of_File);
+				Write_to_File( name_of_File, name_of_item, Class_ID, attackpower, range, speed, rate_of_fire, clipsize, mag_Num, searalNo, counter);
+				// next step
+				cout << "\nwould you like to see the file?\n" << endl;
+				is_Yes_Or_No = Yes_Or_No();
+				if(is_Yes_Or_No == 1){
+					read_file(name_of_File);
+				}else{
+					//cout << "BYE!"; 
+				}
+			}
+		}
+	}
+	return;
+}// END OF Create_file
+
+// Yes_Or_No function
+int Yes_Or_No(){
+	int choice;
+
+	cout << "\n\n1 - yes" << endl;
+	cout << "2 - no\n" << endl;
+
+	cin >> choice;
+	cout << endl;
+	return choice;
+}
+
+string name_File(int x, string sg){
+
+	string name_of_File, name_Wanted = sg;
+	int type = x;
+
+	if(x == 1){
+		name_of_File = name_Wanted + ".txt";
+	}else if(x == 2){
+		name_of_File = name_Wanted + ".doc";
+	}else if(x == 3){
+		name_of_File = name_Wanted + ".dot";
+	}else if(x == 4){
+		name_of_File = name_Wanted + ".dll";
+	}
+	cout << endl;
+	return name_of_File;
+}// end of name_File
+
+void Write_to_File(string name_of_File, string names[],string Class_ID[100],int attackpower[],int range[],int speed[],double rate_of_fire[],int clip_size[],int number_of_mags[], int searalNo[], int number_of_units){	
+	string input_to_files;
+	int is_Yes_Or_No = 0;
+
+	ofstream objectFile(name_of_File);
+
+	if(objectFile.is_open()){
+		for(int a = 0; a < number_of_units; a++){
+
+			objectFile << names[a] << ' ' << Class_ID[a] << ' ' << attackpower[a] << ' ' << range[a] << ' ' << speed[a] << ' ' << rate_of_fire[a] << ' ' << clip_size[a] << ' ' << number_of_mags[a] << ' ' << searalNo[a] << ' ' << endl;
+
+		}
+	}
+
+	objectFile.close();
+}//end of Write_to_File
+
+//displayItems function
+void read_file(string name){
+	string a0,a1, title = name;
+	int a2,a3,a4,a6,a7,a8,a9 = 1;
+	double a5;
+
+	ifstream objectFile2(title);
+	if(objectFile2.is_open()){
+		while(objectFile2 >> a0 >> a1 >> a2 >> a3 >> a4 >> a5 >> a6 >> a7 >> a8){
+			cout << "\nItem #" << a9++ << " in the List:\n" << "Name: " << a0 << "\nClass/Type: " << a1 << "\nAttack_power/Damage: " << a2 << "\nRange: " << a3 << "\nSpeed: " << a4 << "\nrate of fire(in sec.): " << a5 << "\nclip size: " << a6 << "\nmag Count: " << a7 << "\nSeral #" << a8 << endl;
+		}
+	}
+	cout << endl;
+	return;
+}// end of read file 
+
+void Edit_File(string name_of_file){
+
+	int is_Yes_Or_No = 0, passer1 = 0;
+	string a0,a1, title = name_of_file, names[100], Class_ID[100];
+	int a2,a3,a4,a6,a7,a8;
+	double a5;
+	int attackpower[100], range[100], speed[100], clipsize[100],mag_count[100], searalNo[100], counter = 0;
+	double rate_of_fire[100];
+
+	ifstream objectFile3(title);
+		while(objectFile3 >> a0 >> a1 >> a2 >> a3 >> a4 >> a5 >> a6 >> a7 >> a8){
+			int x = counter;
+			names[x] = a0;
+			Class_ID[x] = a1;
+			attackpower[x] = a2;
+			range[x] = a3;
+			speed[x] = a4;
+			rate_of_fire[x] = a5;
+			clipsize[x] = a6;
+			mag_count[x] = a7;
+			searalNo[x] = a8;
+			counter++;
+		}
+		cout << "Items in file: \n";
+
+		read_file(title);
+
+	cout << "\nMaking Gun/wepon statistics for a game/bluprint...\n\n";
+
+	for(int x = counter; is_Yes_Or_No != 2;x++){
+		cout << "Name: ";
+		cin >> names[x];
+		cout << "Type/Sniper/MG./ext: ";
+		cin >>  Class_ID[x];
+		cout << "Attack power/Damage: ";
+		cin >> attackpower[x];
+		cout << "Range: ";
+		cin >> range[x];
+		cout << "Speed: ";
+		cin >> speed[x];
+		cout << "rate of fire\n(in sec.): ";
+		cin >> rate_of_fire[x];
+		cout << "clip_size: ";
+		cin >> clipsize[x];
+		cout << "Searal No#: ";
+		cin >> searalNo[x];
+
+		counter++;
+
+		cout << "\nwould you like to add a new item?" << endl;
+		
+		is_Yes_Or_No = Yes_Or_No();
+
+	}
+	
+	if(is_Yes_Or_No == 2){
+		cout << "\nwould you like to save your changes...?\n";
+		is_Yes_Or_No = Yes_Or_No();
+		if(is_Yes_Or_No == 1){
+			Write_to_File( title, names, Class_ID, attackpower, range, speed, rate_of_fire, clipsize, mag_count, searalNo, counter);
+		}else{
+			return;
+		}
+	}
+	cout << "\nwould you like to see the file?" << endl;
+	is_Yes_Or_No = Yes_Or_No();
+	if(is_Yes_Or_No == 1){
+		read_file(title);
+	}else{
+		//cout << "BYE!"; 
+	}
+	return;
+
+}
